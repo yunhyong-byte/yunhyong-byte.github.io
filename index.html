@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rethinking AI Performance — Ethical Foundations & Cultural Contexts</title>
+<style>
+:root{
+  --bg:#0f1221;--ink:#e9ecff;--muted:#b7c0e6;
+  --node1:#181b2d;--node2:#202543;--accent:#7aa2ff;
+  --shadow:0 8px 20px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:radial-gradient(1200px 800px at 15% -10%,#1a2040 0%,#0f1221 55%,#0b0e1a 100%);
+  color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,Noto Sans;
+  line-height:1.35;
+}
+.wrap{max-width:900px;margin:clamp(16px,3vw,32px) auto;padding:0 clamp(12px,2vw,24px);}
+
+/* Title + subtitle */
+h1{
+  font-size:clamp(1.6rem,2.8vw,2.2rem);
+  color:var(--accent);
+  font-weight:800;
+  letter-spacing:.02em;
+  text-align:center;
+  margin:0 0 .35rem 0;
+  text-shadow:0 2px 6px rgba(0,0,0,.4);
+}
+.subtitle{
+  text-align:center;
+  font-size:clamp(1rem,2.1vw,1.2rem);
+  color:#d6defa;
+  margin:.1rem 0 .9rem 0;
+}
+
+/* Cards + nodes */
+h2,h3{margin:0 0 .35rem 0;}
+h2{font-size:clamp(1.05rem,2vw,1.25rem);}
+h3{font-size:1.05rem;}
+.sub{margin:0;color:var(--muted);font-size:.92rem;}
+.accent{color:var(--accent);font-weight:700;}
+.badge{display:inline-block;font-size:.7rem;color:#d9e1ff;background:#25306a;
+  border:1px solid #3a478c;padding:3px 8px;border-radius:999px;margin-right:6px;margin-top:4px;}
+
+.card,details.node{
+  border:1px solid #2b3159;border-radius:12px;
+  background:linear-gradient(180deg,var(--node1),var(--node2));box-shadow:var(--shadow);
+}
+.card{padding:14px 16px;margin-bottom:12px;}
+.card p{margin:.35rem 0;color:var(--muted)}
+.card ul{margin:.35rem 0 .2rem 1.15rem}
+.card li{margin:.2rem 0}
+
+details.node{overflow:hidden;}
+summary{list-style:none;cursor:pointer;outline:none;padding:14px 16px;position:relative;}
+summary::-webkit-details-marker{display:none;}
+summary::after{
+  content:"▸";position:absolute;right:14px;top:14px;font-size:1rem;color:#c7d1ff;
+  transform:translateY(2px);transition:transform .2s ease;
+}
+details[open]>summary::after{transform:rotate(90deg) translateX(-2px);}
+details.node:hover{border-color:#3b4480;transform:translateY(-1px);
+  box-shadow:0 12px 26px rgba(22,28,58,.55);transition:.18s ease;}
+.content{
+  border-top:1px solid #2b3159;
+  background:linear-gradient(180deg,#151833,#171c3a);
+  padding:12px 16px;
+}
+.content p{margin:.35rem 0;color:var(--muted);}
+.content ul{margin:.35rem 0 .2rem 1.1rem;}
+.content li{margin:.2rem 0;}
+.stack{display:flex;flex-direction:column;gap:12px;}
+.children{display:flex;flex-direction:column;gap:10px;margin-top:10px;}
+.child{border-color:#36407a;background:linear-gradient(180deg,#1a1f3a,#20264a);}
+</style>
+<style>
+  .img-block{ margin:10px 0 6px; }
+  .img-block img{
+    display:block;
+    max-width:80%;
+    height:auto;
+    border-radius:8px;
+    border:1px solid #2b3159; /* helps visibility on dark backgrounds */
+    background:#0e1230;       /* shows white logos with transparency */
+  }
+  .img-block figcaption{
+    margin-top:6px; font-size:.9rem; color:#b7c0e6;
+  }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <!-- New title & subtitle -->
+  <h1>Rethinking AI Performance: Ethical Foundations and Cultural Contexts in Development and Evaluation</h1>
+  <div class="subtitle">AI and the Transformation of Metadata Research and Practices – Global and Regional Perspectives</div>
+
+<!-- =========================
+AUTHOR & LOGOS SECTION
+Place this immediately below the title/subtitle
+========================= -->
+
+<div style="
+  background:#f6f7fa;
+  border-radius:12px;
+  border:1px solid #d0d4e6;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  margin:18px 0 22px;
+  padding:18px 24px;
+  text-align:center;
+  color:#1a1d2d;
+">
+  <!-- Author Information -->
+  <div style="margin-bottom:14px; line-height:1.6;">
+    <strong>Author/Presenter:</strong> Yunhyong Kim<br>
+    <strong>Email:</strong>
+    <a href="mailto:yunhyong.kim@glasgow.ac.uk" style="color:#0046cc; text-decoration:none;">your.email@institution.ac.uk</a>
+  </div>
+
+  <!-- Logos Row -->
+  <div style="
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
+    gap:20px;
+  ">
+    <!-- Logo 1 -->
+    <img src="Media_1015340_smxx.jpg"
+         alt="University of Glasgow logo"
+         style="height:70px; background:#1a1d2d; border-radius:6px; padding:6px;">
+    <!-- Logo 2 -->
+    <img src="FullLogoWhite.png"
+         alt="Project PHAWM logo"
+         style="height:70px;">
+    <!-- Logo 3 -->
+    <img src="RAiUK_Logo.jpg"
+         alt="Funder RAI U.K. logo"
+         style="height:70px;">
+  </div>
+</div>
+
+  <!-- New rationale text -->
+  
+
+  <!-- Intro from your file -->
+  <div class="card intro">
+    <h2>Reframing the ML/GenAI Pipeline</h2>
+
+  <div class="card" aria-label="Why reframe the pipeline">
+    <p><strong>Why reframe the pipeline?</strong> The familiar “collect → clean → train” storyline obscures the curatorial and ethical work that shapes model behaviour. A curation-centred view (informed by UK DCC principles) surfaces task context, interoperability, provenance, and stewardship as first-class concerns in both classical ML and GenAI.</p>
+    <ul>
+      <li><strong>Context first:</strong> task definition and intended use establish inclusion rules, success criteria, and risk posture.</li>
+      <li><strong>Interoperability:</strong> transformation/standardisation enable reproducibility and reuse across teams and time.</li>
+      <li><strong>Alignment as data work:</strong> labels, pairs, and preference data encode values and semantics.</li>
+      <li><strong>Provenance & licensing:</strong> documentation, consent, and versioning are essential to accountability.</li>
+      <li><strong>Ethics → evaluation:</strong> performance includes safety, fairness, calibration, and cultural fit—not metrics alone.</li>
+    </ul>
+  </div>
+  <p>Click the root node to reveal the five major stages. Each stage expands vertically to show its explanation, and <strong>Data Curation</strong> opens further to show its six sub-stages.</p>
+    </div>
+
+  <!-- Root node (unchanged in structure from your file) -->
+  <details class="node">
+    <summary>
+      <h2><span class="accent">Curation-Centred ML/GenAI Pipeline — Click to Expand</span></h2>
+      <p class="sub">Open to view the complete pipeline.</p>
+    </summary>
+
+    <div class="content">
+      <div class="stack">
+
+        <!-- Data Curation -->
+        <details class="node">
+          <summary>
+            <h2><span class="accent">Data Curation</span></h2>
+            <p class="sub">Task definition, acquisition, documentation, transformation, alignment, quality control.</p>
+            <span class="badge">DCC principles</span><span class="badge">Context & Standards</span>
+          </summary>
+          <div class="content">
+            <p><strong>Explanation:</strong> Active stewardship of data across its lifecycle — making it meaningful, standardised, interoperable, and reusable. It includes the sub-processes below.</p>
+
+            <div class="children">
+
+              <details class="node child">
+                <summary><h3>Task Definition</h3><p class="sub">Goals, scope, ethics.</p></summary>
+                <div class="content"><p>Define goals, stakeholders, risks, and success criteria. Establish inclusion/exclusion rules and anticipate fairness and compliance needs.</p></div>
+              </details>
+
+              <details class="node child">
+                <summary><h3>Data Acquisition</h3><p class="sub">Source, sample, license, representativeness.</p></summary>
+                <div class="content"><p>Source and sample data to match the task and population. Ensure licensing, consent, and representativeness; plan balance (classical ML) or coverage/diversity (GenAI).</p></div>
+              </details>
+
+              <details class="node child">
+                <summary><h3>Documentation</h3><p class="sub">Provenance and metadata.</p></summary>
+                <div class="content"><p>Record origins, transformations, and intended uses (e.g. Datasheets for Datasets, Model Cards). Track lineage, retention, and access controls for accountability and reuse.</p></div>
+              </details>
+
+              <details class="node child">
+                <summary><h3>Transformation</h3><p class="sub">Schemas, normalisation, tokenisation.</p></summary>
+                <div class="content"><p>Define schemas and reproducible pipelines: cleaning, scaling, tokenisation, and mapping for interoperability and reproducibility.</p></div>
+              </details>
+
+              <details class="node child">
+                <summary><h3>Alignment</h3><p class="sub">Labels, pairs, preference data.</p></summary>
+                <div class="content"><p>Create labels, pairs, and preference data; validate and resolve conflicts; document uncertainty. For multimodal/GenAI, include caption and text–image alignment checks.</p></div>
+              </details>
+
+              <details class="node child">
+                <summary><h3>Quality Control</h3><p class="sub">Deduplication, bias audits, drift, preservation.</p></summary>
+                <div class="content"><p>Deduplicate and filter; audit bias and toxicity; monitor drift; version dataset releases; and design archival and access strategies to keep data usable over time.</p></div>
+              </details>
+
+            </div>
+          </div>
+        </details>
+
+        <!-- Model Development -->
+        <details class="node">
+          <summary>
+            <h2><span class="accent">Model Development</span></h2>
+            <p class="sub">Pre-training, fine-tuning, and interfaces.</p>
+          </summary>
+          <div class="content">
+            <p><strong>Explanation:</strong> Build and adapt models using curated data. Classical ML: supervised training and feature engineering. GenAI: self-supervised pre-training, instruction fine-tuning, and safety alignment.</p>
+            <ul>
+              <li>Training types – supervised, self-supervised, contrastive.</li>
+              <li>Adaptation – LoRA/adapters, instruction tuning, domain specialisation.</li>
+              <li>Interfaces – features (classic) vs prompts/tools (GenAI).</li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Evaluation -->
+        <details class="node">
+          <summary>
+            <h2><span class="accent">Evaluation</span></h2>
+            <p class="sub">Metrics and human review for quality and robustness.</p>
+          </summary>
+          <div class="content">
+            <p><strong>Explanation:</strong> Combine quantitative metrics with human-centred evaluation. Benchmarks reveal progress but must be paired with qualitative review and subgroup analysis.</p>
+            <ul>
+              <li>Metrics – accuracy/F1, BLEU/FID, calibration and robustness.</li>
+              <li>Human evaluation – red-teaming, UX quality, expert review.</li>
+              <li>Fairness – sub-group performance and harm analysis.</li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Deployment -->
+        <details class="node">
+          <summary>
+            <h2><span class="accent">Deployment</span></h2>
+            <p class="sub">Serving, performance, cost, privacy, compliance.</p>
+          </summary>
+          <div class="content">
+            <p><strong>Explanation:</strong> Serve models reliably and responsibly while managing latency, throughput, cost, security, and compliance.</p>
+            <ul>
+              <li>Roll-out – canary/shadow, A/B testing, versioning.</li>
+              <li>Optimisation – batching, caching, quantisation.</li>
+              <li>Privacy & access – data boundaries and audit logs.</li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Monitoring -->
+        <details class="node">
+          <summary>
+            <h2><span class="accent">Monitoring</span></h2>
+            <p class="sub">Telemetry, drift, feedback loops, governance.</p>
+          </summary>
+          <div class="content">
+            <p><strong>Explanation:</strong> Continuous oversight of performance, safety, and societal impact. Manage drift, incidents, and retraining cycles.</p>
+            <ul>
+              <li>Observability – telemetry, alerts, incident response.</li>
+              <li>Drift – detect data or concept drift and regressions.</li>
+              <li>Feedback – user signals and lifecycle governance.</li>
+            </ul>
+          </div>
+        </details>
+
+      </div>
+	</div>
+  </details>
+	  <!-- =========================
+SECOND CONCEPT MAP (drop-in)
+Place this AFTER the first root </details> and BEFORE the final </div> of .wrap
+Keeps your existing CSS and structure unchanged.
+========================= -->
+
+<div class="card intro" style="margin-top:14px">
+  <h2>Why each stage of the pipeline needs attention</h2>
+  <div class="card" aria-label="Attention at each stage of the pipeline">
+    <p><strong>Why consider ethical risks at every stage?</strong> Ethical issues arise at every stage, from how data are defined and collected to how models are evaluated and monitored.
+<ul>
+  <li><strong>Each stage has unique actors and decisions:</strong> curators, developers, evaluators, and deployers all hold different responsibilities and leverage points.</li>
+  <li><strong>Bias and harm compound over time:</strong> early-stage imbalances in representation or process can amplify through model training and fine-tuning.</li>
+  <li><strong>Context shapes fairness:</strong> cultural, linguistic, and domain-specific contexts alter what counts as ethical, safe, or fair performance.</li>
+  <li><strong>Transparency builds trust:</strong> documenting ethical considerations across the pipeline supports accountability and public confidence.</li>
+  <li><strong>Legal and societal expectations matter:</strong> equality, privacy, and online safety laws link directly to data handling and AI behaviour.</li>
+  <li><strong>Ethics is continuous, not static:</strong> post-deployment feedback and monitoring must inform retraining, auditing, and policy updates.</li>
+</ul>
+  </div>
+  <p>Evidence-based risks and actions grounded in UK government reporting on online behaviour, harms, and diversity in tech deonstrates the situation. Click to expand each stage.</p>
+</div>
+
+<!-- Root of Map #2 -->
+<details class="node">
+  <summary>
+    <h2><span class="accent">Why each stage of the pipeline needs attention — Click to Expand</span></h2>
+    <p class="sub">Key risks & actions with indicative percentages.</p>
+  </summary>
+
+  <div class="content">
+    <div class="stack">
+
+      <!-- Data Curation -->
+      <details class="node">
+        <summary>
+          <h2><span class="accent">Data Curation</span></h2>
+          <p class="sub">Representation, platform skew, hate/toxicity, provenance.</p>
+        </summary>
+        <div class="content">
+          <ul>
+            <li><strong>Platform→dataset skew:</strong> adults encountering hateful/offensive/discriminatory content ≈ <strong>26%</strong>; hate targeted at <strong>ethnicity ~33%</strong> and <strong>religion ~30%</strong> — risks normalising these patterns if scraped.</li>
+            <li><strong>Demographic usage gap:</strong> generative-AI use skews younger/male (e.g., adult traffic snapshots show men ≈ <strong>62%</strong>; 18–24 reach ≈ <strong>27%</strong>), biasing logs used for fine-tuning/policy.</li>
+            <li><strong>Action:</strong> weight/augment by demographic coverage; store consent/provenance; filter hate/toxicity during curation; document representativeness & gaps.</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- Model Development -->
+      <details class="node">
+        <summary>
+          <h2><span class="accent">Model Development</span></h2>
+          <p class="sub">Who builds, what’s funded, which objectives get set.</p>
+        </summary>
+        <div class="content">
+          <ul>
+            <li><strong>Funding asymmetry:</strong> female-founded AI startups ≈ <strong>2.1%</strong> of deals and <strong>0.8%</strong> of capital; all-male teams ≈ <strong>76.7%</strong> of capital. Avg deal: women ≈ <strong>£1.3m</strong> vs men ≈ <strong>£8.6m</strong> (~<strong>6×</strong> gap).</li>
+            <li><strong>Credential gatekeeping:</strong> hiring filters (e.g., “top universities” ≈ <strong>27%</strong>; bachelor’s “always required” ≈ <strong>49%</strong>) reduce entry via non-orthodox routes.</li>
+            <li><strong>Feedback dominance:</strong> heavier GenAI use by younger men shapes RLHF/DPO signals unless rater pools/logs are reweighted.</li>
+            <li><strong>Action:</strong> skills-based hiring; stratified RLHF raters; earmark compute/infra for all-women & minority-led teams; publish builder-diversity KPIs.</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- Evaluation -->
+      <details class="node">
+        <summary>
+          <h2><span class="accent">Evaluation</span></h2>
+          <p class="sub">Disaggregated metrics and lived-experience testing.</p>
+        </summary>
+        <div class="content">
+          <ul>
+            <li><strong>Disparities in harm:</strong> adults encountering hate/offense/discrimination ≈ <strong>26%</strong>. Targets (users 13+): ethnicity ≈ <strong>33%</strong>, religion ≈ <strong>30%</strong>, women & girls ≈ <strong>26%</strong>, trans people ≈ <strong>30%</strong>, sexual orientation ≈ <strong>20%</strong>.</li>
+            <li><strong>Impact counts:</strong> hateful content high-impact ≈ <strong>61%</strong>; misinformation ≈ <strong>39%</strong> incidence / <strong>26%</strong> high impact; extremist ≈ <strong>9%</strong> incidence / <strong>66%</strong> high impact.</li>
+            <li><strong>Gendered differences:</strong> men report more misinformation (~<strong>41%</strong> vs <strong>37%</strong>) and scams (~<strong>36%</strong> vs <strong>31%</strong>); women report more misogynistic content (~<strong>23%</strong> vs <strong>19%</strong>) and body-image harms (~<strong>21%</strong> vs <strong>13%</strong>).</li>
+            <li><strong>Action:</strong> report subgroup metrics (toxicity FPR/FNR, exposure parity, usability/trust) across ethnicity, religion, gender, sexuality, disability, and age; run participatory red-teaming with affected groups.</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- Deployment -->
+      <details class="node">
+        <summary>
+          <h2><span class="accent">Deployment</span></h2>
+          <p class="sub">Context-aware rollouts and legal duties.</p>
+        </summary>
+        <div class="content">
+          <ul>
+            <li><strong>Platform context:</strong> Reddit/YouTube vs Instagram/Pinterest vs Facebook/WhatsApp have different user mixes → different risk profiles (hate, body-image pressure, scams).</li>
+            <li><strong>Action:</strong> platform-specific fairness checks; canary/A–B with demographically balanced panels; Equality-Act-aligned impact assessments for workplace/consumer AI.</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- Monitoring -->
+      <details class="node">
+        <summary>
+          <h2><span class="accent">Monitoring</span></h2>
+          <p class="sub">Feedback loops, retraining signals, transparency.</p>
+        </summary>
+        <div class="content">
+          <ul>
+            <li><strong>Engagement bias:</strong> GenAI usage skew (e.g., men ≈ <strong>62%</strong> of adult visits; 18–24 reach ≈ <strong>27%</strong>) over-represents some groups in logs.</li>
+            <li><strong>Action:</strong> track who supplies feedback; reweight RLHF/DPO data; publish demographics of learning signals; watch hate/toxicity prevalence trends by group and platform.</li>
+          </ul>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</details>
+
+<!-- =========================
+THIRD CONCEPT MAP (drop-in)
+PHAWM — Participatory Harm Auditing Workbenches & Methodologies
+Place AFTER the second root </details> and BEFORE the final </div> of .wrap
+========================= -->
+
+<div class="card intro" style="margin-top:14px">
+  <h2>Participatory Harm Auditing Workbenches &amp; Methodologies (PHAWM)</h2>
+  <div class="card" aria-label="Participatory audit">
+    <p><strong>Who and what is involved?</strong> 7 HEIs (41 people) across the UK and 35+ partners.</p>
+	<ul>
+  <li><strong>Funding:</strong> £3.5 million funded by RAI UK Keystone Project KP0011(EPSRC grant number EP/Y009800/1).</li>
+  <li><strong>Project lead:</strong> led by Prof. Simone Stumpf (School of Computing Science, University of Glasgow).</li>
+  <li><strong>HEIs:</strong> Edinburgh, Glasgow, Kings College London, Sheffield, Stirling, Strathclyde, York.</li>
+  <li><strong>Use cases:</strong> Health, Media Content, Cultural Heritage, Collaborative Content Creation.</li>
+</ul>
+  </div>
+  <p>Participatory AI auditing for predictive and generative systems — enabling diverse expertise to assess harms and fairness, regardless of AI background. Click to expand each section.</p>
+</div>
+
+<!-- Root of Map #3 -->
+<details class="node">
+  <summary>
+    <h2><span class="accent">PHAWM Project Overview and Update</span></h2>
+    <p class="sub">Overview, deliverables, use cases, and how to get involved.</p>
+  </summary>
+
+  <div class="content">
+    <div class="stack">
+
+      <!-- What is Participatory AI Auditing -->
+      <details class="node">
+        <summary>
+          <h2><span class="accent">What is Participatory AI Auditing?</span></h2>
+          <p class="sub">Bring non-technical stakeholders into harm/fairness auditing.</p>
+        </summary>
+        <div class="content">
+          <ul>
+            <li><strong>Broader expertise:</strong> health practitioners, frontline workers, end users, and the public co-audit AI systems.</li>
+            <li><strong>Predictive + Generative:</strong> applicable to classification/forecasting as well as LLMs and multimodal models.</li>
+            <li><strong>Context-aware:</strong> audits are grounded in local tasks, norms, cultures, and risk tolerances.</li>
+            <li><strong>Transparent process:</strong> documented measures, decisions, and pass/fail criteria.</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- What PHAWM Delivers -->
+      <details class="node">
+        <summary>
+          <h2><span class="accent">What PHAWM Delivers</span></h2>
+          <p class="sub">Workbench, methodology, training, and certification exploration.</p>
+        </summary>
+        <div class="content">
+          <ul>
+            <li><strong>Auditing Workbench:</strong> guided workflows so non-experts can run harm/fairness assessments end-to-end, individually or collectively.</li>
+            <li><strong>Methodology:</strong> define scope, stakeholders, context-specific measures, evidence, and reporting.</li>
+            <li><strong>Training Pathways:</strong> materials for public sector, industry, and civil society auditors.</li>
+            <li><strong>Exploring Certification:</strong> self-certification based on criteria and evidence to support external assurance.</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- Who it's for -->
+      <details class="node">
+        <summary>
+          <h2><span class="accent">Who It’s For</span></h2>
+          <p class="sub">Roles and communities that can participate.</p>
+        </summary>
+        <div class="content">
+          <ul>
+            <li><strong>Public &amp; third sector:</strong> policy teams, regulators, trusts, NGOs.</li>
+            <li><strong>Domain experts:</strong> clinicians, educators, librarians, heritage curators, moderators.</li>
+            <li><strong>Product teams:</strong> PMs, UX researchers, safety/red-teamers.</li>
+            <li><strong>Communities &amp; end users:</strong> affected groups defining meaningful pass/fail criteria.</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- Use case research (nested children) -->
+      <details class="node">
+        <summary>
+          <h2><span class="accent">Research update: Cultural Heritage</span></h2>
+          <p class="sub">Metadata Generation with Generative AI.</p>
+        </summary>
+        <div class="content">
+          <div class="children">
+            <details class="node child">
+              <summary><h3>Workshops</h3><p class="sub">Stakeholder Research and Evaluation</p></summary>
+              <div class="content">
+                <ul>
+                  <li>Six Workshops so far: 4 for requirements gathering, 1 for evaluation, and 1 at ARA for broader research.</li>
+                  <li>Co-design with cultural heritage community around 
+				  <ul>
+				  <li> Perceived harms and understanding of AI</li>
+				  <li> Use of generative AI in cultural heritage workflow</li> 
+				  <li> Measures, information required for auditing, and wireframes</li>
+				  <li> Prompt engineering</li>
+				  </ul>
+				  <li>Largest participation from archives and libraries professionals fo far (approx. 68%).</li>
+				  <li>43 unique locations across all the workshops, such as United Kingdom, England, Scotland, Ireland, Canada, United States, Ghana, South Africa, Italy, Netherlands, France, Australia, Türkiye, Côte d’Ivoire</li>
+				  <li>Most participants lean toward disagreement with the statement “I use generative AI at work.” (Median 2.0 out of max 5) </li>
+				  <li>Participants neither strongly trust nor distrust generative AI.(Median 3.0 out of max 5)</li>
+				</ul>
+              </div>
+            </details>
+			<details class="node child">
+              <summary><h3>Where people come from</h3><p class="sub"> Visiualisation</p></summary>
+              <div class="content">
+			  <figure class="img-block">
+			  <!-- Use a RELATIVE path from the HTML file’s location (example below) -->
+			  <img src="regions4.jpg" alt="geographical regions associated to participants" />
+			  <figcaption>Distribution of geographical regions mentioned (across all workshops)</figcaption>
+			  </figure>
+			  <figure class="img-block">
+			  <!-- Use a RELATIVE path from the HTML file’s location (example below) -->
+			  <img src="continents.png" alt="continents associated to participants" />
+			  <figcaption>Distribution of continents mentioned (across all workshops).</figcaption>
+			  </figure>
+			  <figure class="img-block">
+			  <!-- Use a RELATIVE path from the HTML file’s location (example below) -->
+			  <img src="org_type.png" alt="Organisation types associated to participants" />
+			  <figcaption>Distribution of organisation types mentioned (across all workshops)</figcaption>
+			  </figure>
+			  <figure class="img-block">
+			  <!-- Use a RELATIVE path from the HTML file’s location (example below) -->
+			  <img src="experience_levels.png" alt="level of experience reflecy by participants" />
+			  <figcaption>Self-identified level of experience(ARA workshop)</figcaption>
+			  </figure>
+			  
+              </div>
+            </details>
+            <details class="node child">
+              <summary><h3>Perception of Audit - an impression</h3><p class="sub">- ranked statments</p></summary>
+              <div class="content">
+			  <!-- =========================
+AUDIT STATEMENT RANKING TABLE
+Place this inside a <div class="content"> within any <details class="node">
+========================= -->
+
+<div class="content">
+  <h3>Audit Statement Ranked</h3>
+  <p>The table below summarises how participants at the Archives and Records Association (ARA) workshop ranked different priorities of AI audit.</p>
+
+  <div style="overflow-x:auto; margin-top:8px;">
+    <table style="width:100%; border-collapse:collapse; font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; font-size:16px;">
+  <caption style="caption-side:top; text-align:left; font-weight:600; margin-bottom:8px;">
+    ARA — Average Ranking of Audit Statements (lower = more relevant)
+  </caption>
+  <thead>
+    <tr>
+      <th style="text-align:left; border-bottom:2px solid #ddd; padding:8px;">Rank</th>
+      <th style="text-align:left; border-bottom:2px solid #ddd; padding:8px;">Audit Statement</th>
+      <th style="text-align:right; border-bottom:2px solid #ddd; padding:8px;">Avg. Rank</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="padding:8px; border-bottom:1px solid #eee;">🥇 1</td>
+      <td style="padding:8px; border-bottom:1px solid #eee;">
+        <strong>Risk assessment</strong> — “to identify risks, potential mitigation, likelihood and impact of harms”
+      </td>
+      <td style="padding:8px; text-align:right; border-bottom:1px solid #eee;"><strong>1.97</strong></td>
+    </tr>
+    <tr>
+      <td style="padding:8px; border-bottom:1px solid #eee;">🥈 2</td>
+      <td style="padding:8px; border-bottom:1px solid #eee;">
+        <strong>Verification</strong> — “accuracy or validity of generative AI performance in relation to established truths”
+      </td>
+      <td style="padding:8px; text-align:right; border-bottom:1px solid #eee;"><strong>2.14</strong></td>
+    </tr>
+    <tr>
+      <td style="padding:8px; border-bottom:1px solid #eee;">🥉 3</td>
+      <td style="padding:8px; border-bottom:1px solid #eee;">
+        <strong>Compliance</strong> — “requirements, policies, regulation, legal frameworks”
+      </td>
+      <td style="padding:8px; text-align:right; border-bottom:1px solid #eee;"><strong>2.43</strong></td>
+    </tr>
+    <tr>
+      <td style="padding:8px;">4</td>
+      <td style="padding:8px;">
+        <strong>Quality assurance</strong> — “product or system development process”
+      </td>
+      <td style="padding:8px; text-align:right;"><strong>3.12</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+</div>
+
+                <ul>
+                  <li>ARA participants gave top priority to risk assessment, closely followed by accuracy and verification.</li>
+                  <li>Compliance and process assurance were secondary.</li>
+                </ul>
+              </div>
+            </details>
+            <details class="node child">
+              <summary><h3>Thematic and semantic analysis</h3><p class="sub"> - priorities expressed in open text</p></summary>
+              <div class="content">
+			  <table style="width:100%; border-collapse:collapse; font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; font-size:15px;">
+  <caption style="caption-side:top; text-align:left; font-weight:600; margin-bottom:8px;">
+    ARA – Key Themes in “What is an audit?”
+  </caption>
+  <thead>
+    <tr>
+      <th style="text-align:left; border-bottom:2px solid #ddd; padding:6px;">Dominant Theme</th>
+      <th style="text-align:left; border-bottom:2px solid #ddd; padding:6px;">Description</th>
+      <th style="text-align:left; border-bottom:2px solid #ddd; padding:6px;">Evidence (example quotes)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="padding:6px; border-bottom:1px solid #eee;"><strong>Verification &amp; Checking</strong></td>
+      <td style="padding:6px; border-bottom:1px solid #eee;">Checking accuracy, validity, and evidence-based review</td>
+      <td style="padding:6px; border-bottom:1px solid #eee;">“It is the checking of activities against a set of standards.”</td>
+    </tr>
+    <tr>
+      <td style="padding:6px; border-bottom:1px solid #eee;"><strong>Evaluation &amp; Oversight</strong></td>
+      <td style="padding:6px; border-bottom:1px solid #eee;">Systematic review or assessment process</td>
+      <td style="padding:6px; border-bottom:1px solid #eee;">“A systematic review of practice…”</td>
+    </tr>
+    <tr>
+      <td style="padding:6px; border-bottom:1px solid #eee;"><strong>Process &amp; Quality Improvement</strong></td>
+      <td style="padding:6px; border-bottom:1px solid #eee;">Identifying strengths, weaknesses, improvement</td>
+      <td style="padding:6px; border-bottom:1px solid #eee;">“A review to identify strengths and weaknesses.”</td>
+    </tr>
+    <tr>
+      <td style="padding:6px; border-bottom:1px solid #eee;"><strong>Compliance &amp; Standards</strong></td>
+      <td style="padding:6px; border-bottom:1px solid #eee;">Checking against policies, procedures, and regulations</td>
+      <td style="padding:6px; border-bottom:1px solid #eee;">“Assessing adherence to standards and legal frameworks.”</td>
+    </tr>
+    <tr>
+      <td style="padding:6px;"><strong>Risk Assessment (weakly represented)</strong></td>
+      <td style="padding:6px;">Considering harm or mitigation explicitly</td>
+      <td style="padding:6px;">Very few direct mentions (only 2) — e.g., “To reduce risk or impact of harm.”</td>
+    </tr>
+  </tbody>
+</table>
+
+                <ul>
+                  <li>Open text data largely framed auditing as a checking or verification process (accuracy, standards).</li>
+                  <li>Also framed as a systematic review for improvement (quality assurance).</li>
+				  <li>Risk assessment was rarely mentioned explicitly.</li>
+                </ul>
+              </div>
+            </details>
+            <details class="node child">
+              <summary><h3>Discrepancy</h3><p class="sub">- ranking vs open text data.</p></summary>
+              <div class="content">
+                <table style="width:100%; border-collapse:collapse; font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; font-size:15px;">
+  <caption style="caption-side:top; text-align:left; font-weight:600; margin-bottom:8px;">
+    Comparison – Audit Statement Ranking vs. Open Text Themes (ARA)
+  </caption>
+  <thead>
+    <tr>
+      <th style="text-align:left; border-bottom:2px solid #ddd; padding:6px;">Aspect</th>
+      <th style="text-align:left; border-bottom:2px solid #ddd; padding:6px;">Quantitative (Ranking)</th>
+      <th style="text-align:left; border-bottom:2px solid #ddd; padding:6px;">Qualitative (Open Text)</th>
+      <th style="text-align:left; border-bottom:2px solid #ddd; padding:6px;">Alignment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="padding:6px; border-bottom:1px solid #eee;"><strong>Verification / Accuracy</strong></td>
+      <td style="padding:6px; border-bottom:1px solid #eee;">Ranked <strong>#2</strong>, strong emphasis</td>
+      <td style="padding:6px; border-bottom:1px solid #eee;"><strong>Most dominant</strong> qualitative theme</td>
+      <td style="padding:6px; border-bottom:1px solid #eee;">✅ Strong alignment</td>
+    </tr>
+    <tr>
+      <td style="padding:6px; border-bottom:1px solid #eee;"><strong>Risk Assessment</strong></td>
+      <td style="padding:6px; border-bottom:1px solid #eee;">Ranked <strong>#1</strong>, top priority</td>
+      <td style="padding:6px; border-bottom:1px solid #eee;"><strong>Rarely mentioned</strong> explicitly</td>
+      <td style="padding:6px; border-bottom:1px solid #eee;">⚠️ Divergence</td>
+    </tr>
+    <tr>
+      <td style="padding:6px; border-bottom:1px solid #eee;"><strong>Compliance / Standards</strong></td>
+      <td style="padding:6px; border-bottom:1px solid #eee;">Ranked <strong>#3</strong></td>
+      <td style="padding:6px; border-bottom:1px solid #eee;"><strong>Moderately represented</strong></td>
+      <td style="padding:6px; border-bottom:1px solid #eee;">✅ Partial alignment</td>
+    </tr>
+    <tr>
+      <td style="padding:6px;"><strong>Quality / Process</strong></td>
+      <td style="padding:6px;">Ranked <strong>#4</strong></td>
+      <td style="padding:6px;"><strong>Frequent theme</strong> (process, improvement)</td>
+      <td style="padding:6px;">⚠️ Inverse pattern — valued qualitatively but lower ranked quantitatively</td>
+    </tr>
+  </tbody>
+</table>
+
+              </div>
+            </details>
+          </div>
+        </div>
+      </details>
+
+      <!-- Get involved / CTA -->
+      <details class="node">
+        <summary>
+          <h2><span class="accent">Get Involved</span></h2>
+          <p class="sub">Pilots, training, and collaboration.</p>
+        </summary>
+        <div class="content">
+          <ul>
+            <li><strong>Pilots:</strong> host a participatory audit in one of the four use-case domains.</li>
+            <li><strong>Training:</strong> register teams for the auditor pathway and materials.</li>
+            <li><strong>Contribute:</strong> methods, datasets, prompts, and evaluation tasks for the workbench.</li>
+            <li><strong>Sign up:</strong> mail list at the PHAWM website https://phawm.org/.</li>
+			<li><strong>Contact:</strong> the engagement team at phawm-engagement@lists.cent.gla.ac.uk</li>
+			<li><strong>Follow on LinkedIn:</strong> <a href="https://www.linkedin.com/company/phawm">PHAWM</a> or <a href"https://uk.linkedin.com/in/yunhyong-kim-1398b4108">Yunhyong</a>.</li>
+          </ul>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</details>
+
+<!-- =========================
+CONCLUDING SLIDE
+Place AFTER the third concept map and BEFORE the final </div> of .wrap
+========================= -->
+
+<div class="card intro" style="margin-top:14px">
+  <h2>Experiementing with AI Performance</h2>
+  <div class="card" aria-label="Exploratory AI experiements">
+    <p><strong>Exploratory experiments with generative AI:</strong> Already happening.</p>
+	<ul>
+	<li><strong>AI & Reasoning:</strong> questioned by Melanie Mitchell - for example, see LLM and World Models <a href="https://aiguide.substack.com/p/llms-and-world-models-part-1" style="color:white;">Part 1</a> and <a href="https://aiguide.substack.com/p/llms-and-world-models-part-2" style="color:white;">Part 2</a>.</li>
+	<li><strong>AI & Education:</strong> experiments with AI on his blog <a href="https://www.dustinhosseini.com/blog" style="color:white;">Dustin Hosseini</a>.</li>
+	<li><strong>AI & Science:</strong> <a href="https://agents4science.stanford.edu/" style="color:white;">Open Conference AI Agents for Science</a>.</li>
+	<li><strong>Room for ambiguity, plurality and context-dependence:</strong> currently not considered sufficiently in performance.</li>
+	</ul>
+  </div>
+</div>
+<div class="card intro" style="margin-top:14px">
+  <h2>Rethinking AI Performance</h2>
+  <div class="card" aria-label="Rethinking AI Performance">
+    <p><strong>How to bring it together?</strong></p>
+	<ul>
+  <li><strong>Rethinking the pipeline:</strong> data curation rather than data collection.</li>
+  <li><strong>Need for performance measure:</strong> at each stage of the pipeline for example quality of curation.</li>
+  <li><strong>Unifying evaluation and audit:</strong> which is often conflated (example of ARA data).</li>
+  <li><strong>Room for ambiguity, plurality and context-dependence:</strong> not considered sufficiently in performance measures.</li>
+</ul>
+  </div>
+</div>
+  
+</div>
+</body>
+</html>
