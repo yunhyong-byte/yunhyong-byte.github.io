@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digital Preservation & Digital Curation - From Wall to Web: A Community Roundtable Considering How to Archive BME Histories and Events</title>
+  <style>
+    :root{
+      /* colors */
+      --bg: #fbfaf7;           /* off-white background */
+      --card: #ffffff;         /* cards remain white for legibility */
+      --ink: #1a1a1a;          /* main text */
+      --muted:#555;
+      --accent:#007b83;
+      --accent-2:#3083dc;
+      --line:#d2d6da;
+      --ring:#007b83;
+      --maxw: 1100px;
+      /* flagged term colour: slightly lighter than main text (soft grey) */
+      --flag: #444;            /* accessible contrast but calmer than orange */
+      --tip: #fffff8;          /* tooltip background */
+    }
+
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans";
+      background: var(--bg);
+      color:var(--ink);
+      line-height:1.55;
+    }
+
+    header{
+      position: sticky; top:0; z-index:10;
+      background:rgba(255,255,255,0.9);
+      backdrop-filter: blur(6px);
+      border-bottom:1px solid var(--line);
+    }
+    .bar{max-width:var(--maxw); margin:auto; padding:.75rem 1rem; display:flex; gap:.75rem; align-items:center; flex-wrap:wrap}
+    .title{font-weight:700; letter-spacing:.2px}
+    .spacer{flex:1}
+    .btn{ border:1px solid var(--line); background:var(--card); color:var(--ink); padding:.45rem .7rem; border-radius:999px; cursor:pointer; font-size:.9rem; }
+    .btn:focus{outline:2px solid transparent; box-shadow:0 0 0 3px var(--ring)}
+
+    main{max-width:var(--maxw); margin: 1.2rem auto 3rem; padding: 0 1rem}
+
+    .map-root{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:1rem}
+
+    details.node{position:relative; border-left:2px solid var(--line); margin-left:1rem; padding-left:1rem; margin-block:.6rem}
+    details.node::before{content:""; position:absolute; left:-6px; top:.85rem; width:10px; height:10px; border-radius:50%; background:var(--accent-2); box-shadow:0 0 0 3px color-mix(in oklab, var(--accent-2) 35%, transparent 65%); }
+    details.node[level="1"]::before{ background:var(--accent); box-shadow:0 0 0 3px color-mix(in oklab, var(--accent) 35%, transparent 65%); }
+    details[open] > summary .caret{ transform:rotate(90deg) }
+
+    summary{list-style:none; cursor:pointer; display:flex; align-items:flex-start; gap:.55rem; font-weight:600}
+    summary::-webkit-details-marker{display:none}
+
+    .caret{transition:transform .2s ease; margin-top:.2rem; inline-size:1rem; block-size:1rem; display:inline-grid; place-items:center}
+    .caret svg{inline-size:1rem; block-size:1rem}
+
+    .node-card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:.8rem 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,.05)
+    }
+    .node-card:hover{border-color: color-mix(in oklab, var(--accent-2) 60%, var(--line));}
+
+    /* tiny gap between a section title (summary) and its content card */
+    details.node > summary + .node-card{ margin-top: 6px; }
+
+    .meta{color:var(--muted); font-size:.93rem}
+    .pill{display:inline-block; font-size:.75rem; padding:.15rem .5rem; border:1px solid var(--line); border-radius:999px; margin-left:.35rem}
+
+    ul{margin:.5rem 0 .2rem 1rem}
+    ul > li{margin:.25rem 0}
+
+    .hint{color:var(--muted); font-size:.9rem; margin-top:.35rem}
+
+    .root-intro{border-left:0; margin-left:0; padding-left:0}
+    .root-title{font-size:1.2rem}
+
+    a.help{color:var(--accent-2); text-decoration:underline dotted}
+
+    /* Flagged terminology (soft grey) */
+    .flag{
+      color: var(--flag);
+      text-decoration: underline;
+      position: relative;
+      cursor: help;
+      font-weight:600;
+      display:inline-block;
+    }
+    .flag:focus-visible{ outline:2px solid transparent; box-shadow:0 0 0 3px var(--ring); border-radius:4px }
+    .flag::after{
+      content: attr(data-tip);
+      position: absolute; left: 0; top: calc(100% + 8px);
+      display: block; opacity: 0; pointer-events: none;
+      background: var(--tip); color: #111;
+      border:1px solid var(--line); border-radius: 8px;
+      padding:.6rem .7rem; min-width: 240px; max-width: 420px;
+      box-shadow: 0 6px 24px rgba(0,0,0,.15);
+      font-size: .85rem; line-height:1.35;
+      transform: translateY(4px); transition: opacity .18s ease, transform .18s ease; z-index: 999; white-space: normal;
+    }
+    .flag:hover::after, .flag:focus::after{ opacity:1; transform: translateY(0) }
+    .flag::before{
+      content:""; position:absolute; left: 14px; top: calc(100% + 4px);
+      width:10px; height:10px; background: var(--tip);
+      border-left:1px solid var(--line); border-top:1px solid var(--line);
+      transform: rotate(45deg); opacity:0; transition: opacity .18s ease; z-index:998;
+    }
+    .flag:hover::before, .flag:focus::before{ opacity:1 }
+
+    /* References tables */
+    .refs h2{ font-size:1.15rem; margin:1.4rem 0 .6rem }
+    .table-wrap{ overflow:auto; border:1px solid var(--line); border-radius:12px; background:var(--card); box-shadow: 0 2px 10px rgba(0,0,0,.04) }
+    table{ width:100%; border-collapse: collapse; font-size:.95rem }
+    thead th{ position:sticky; top:0; background:#fafafa; border-bottom:1px solid var(--line); text-align:left; padding:.6rem .7rem }
+    tbody td{ padding:.6rem .7rem; vertical-align: top; border-bottom:1px solid #f0f2f4 }
+    tbody tr:last-child td{ border-bottom:0 }
+
+    /* Reference link tooltip */
+    .ref-link{
+      position:relative;
+      text-decoration:underline;
+      cursor:help;
+      display:inline-block;
+      vertical-align:baseline;
+    }
+    .ref-link::after{
+      content: attr(data-tip);
+      position:absolute; left:0; top: calc(100% + 8px);
+      background: var(--tip); color:#111;
+      border:1px solid var(--line); border-radius:8px;
+      padding:.55rem .65rem; min-width: 240px; max-width: 420px;
+      box-shadow: 0 6px 24px rgba(0,0,0,.15);
+      font-size:.85rem; line-height:1.35; opacity:0;
+      transform:translateY(4px); transition: opacity .18s ease, transform .18s ease; z-index:999;
+      white-space:normal; pointer-events:none;
+    }
+    .ref-link:hover::after, .ref-link:focus::after{ opacity:1; transform:translateY(0) }
+
+    /* Section 6 (References) — tooltip to LEFT so links aren’t covered */
+    .refs .ref-link::after{
+      left:auto; right: calc(100% + 10px); top: 50%;
+      transform: translateY(-50%); transition: opacity .18s ease, transform .18s ease;
+    }
+    .refs .ref-link:hover::after, .refs .ref-link:focus::after{
+      opacity:1; transform: translateY(-50%);
+    }
+    .refs .ref-link::before{
+      content:""; position:absolute; right: calc(100% + 4px); top: 50%;
+      width:10px; height:10px; background: var(--tip);
+      border-right:1px solid var(--line); border-bottom:1px solid var(--line);
+      transform: translateY(-50%) rotate(45deg); opacity:0; transition: opacity .18s ease; z-index:998; pointer-events:none;
+    }
+    .refs .ref-link:hover::before, .refs .ref-link:focus::before{ opacity:1 }
+
+    /* Quote cards */
+    .quote-card{
+      margin:.85rem 0; padding:.85rem 1rem; border:1px solid var(--line);
+      border-left:4px solid var(--accent-2); border-radius:12px; background:#fbfdff;
+      font-size:.98rem; line-height:1.45
+    }
+    .quote-card .by{ display:block; margin-top:.35rem; color:#666; font-size:.9rem }
+
+    @media (max-width: 520px){
+      .flag::after{ left:auto; right:0; }
+      .flag::before{ left:auto; right:14px; }
+      .ref-link::after{ left:auto; right:0 }
+      .refs .ref-link::after{
+        right:auto; left:0; top: calc(100% + 8px);
+        transform: translateY(4px);
+      }
+      .refs .ref-link:hover::after,
+      .refs .ref-link:focus::after{ transform: translateY(0); }
+      .refs .ref-link::before{
+        right:auto; left:14px; top: calc(100% + 4px); transform: rotate(45deg);
+      }
+    }
+
+    @media print{
+      body{background:white; color:#111}
+      header{display:none}
+      .map-root{border:0; padding:0}
+      .node-card{box-shadow:none}
+      .flag{color:#333; text-decoration: underline}
+      .flag::after, .flag::before{display:none}
+      .quote-card{ border:0; padding:0; margin:.4rem 0; color:#333; font-style:italic }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="bar">
+      <div class="title">Digital Preservation & Digital Curation - From Wall to Web: A Community Roundtable Considering How to Archive <span class="flag" tabindex="0" data-tip="Consider ‘Black and global majority communities in Scotland’ or ‘people of African, Asian, and diasporic heritage in Scotland’. Reason: ‘BME’ can flatten distinct identities and frame groups as ‘minorities’.">BME</span> Histories and Events</div>
+      <div class="spacer"></div>
+      <button class="btn" id="expand">Expand all</button>
+      <button class="btn" id="collapse">Collapse all</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="map-root">
+      <details class="node root-intro" open>
+        <summary class="node-card root-title">
+          <span class="caret" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 5l6 5-6 5V5z"/></svg>
+          </span>
+          Digital Preservation & Digital Curation - From Wall to Web: A Community Roundtable Considering How to Archive <span class="flag" tabindex="0" data-tip="Consider ‘Black and global majority communities in Scotland’ or similar community-preferred phrasing.">BME</span> Histories and Events
+        </summary>
+        <div class="hint">Terms highlighted <span class="flag" data-tip="Flagged terms: hover to see suggested alternatives and why.">like this</span> are flagged for review. Use the buttons above to expand/collapse everything.</div>
+
+        <!-- 1) Digital Preservation (ONLY this section is open by default) -->
+        <details class="node" level="1" open>
+          <summary class="node-card">
+            <span class="caret" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M7 5l6 5-6 5V5z"/></svg></span>
+            1) Digital Preservation: Core Principles
+            <span class="meta">— ensure <span class="flag" tabindex="0" data-tip="Prefer ‘support long-term, community-approved access’ to emphasise co-defined access terms.">long-term access</span>, <span class="flag" tabindex="0" data-tip="Prefer ‘community-defined authenticity’ or ‘integrity’ to avoid implying a single ‘true’ representation.">authenticity</span>, usability</span>
+          </summary>
+          <div class="node-card">
+            <p><strong>Sustainability &amp; Continuity.</strong>
+              Preserve <span class="flag" tabindex="0" data-tip="Consider ‘digitally created’ or ‘created in digital form’. ‘Born-digital’ assumes a binary and may overlook hybrid community practices (e.g., WhatsApp voice notes, platform-native stories).">born-digital</span>
+              (including oral histories recorded digitally, videos, social media) and
+              <span class="flag" tabindex="0" data-tip="Prefer ‘digitally re-created’ or ‘community-approved digital version’. The phrase ‘digital surrogate’ can devalue digital works, which are interpretive creations that stand alongside, not beneath, their source materials.">digitised</span>
+              <span class="flag" tabindex="0" data-tip="Consider ‘digitally created and digitally captured community materials’. ‘Heritage’ can imply institutional custody rather than community authority.">heritage</span>
+              (photos, letters, posters) in formats that remain accessible over time.
+            </p>
+            <p><strong><span class="flag" tabindex="0" data-tip="Prefer ‘community-defined authenticity’ alongside ‘integrity’.">Authenticity</span> &amp; Integrity.</strong> Maintain trustworthy, well-documented materials with transparent versioning rather than insisting they remain <span class="flag" tabindex="0" data-tip="Consider ‘transparent versioning’ — living records may change as communities correct or extend them.">unaltered</span>; include robust metadata, <span class="flag" tabindex="0" data-tip="Try ‘community context/origin information’. ‘Provenance’ carries property/colonial connotations in some contexts.">provenance</span> and context—capturing lives, cultural practice, activism and contributions.</p>
+            <p><strong>Access &amp; Ethics.</strong> Balance openness with cultural sensitivity, data protection and community rights to narrate their own stories.</p>
+          </div>
+        </details>
+
+        <!-- 2) Digital Curation (collapsed by default) -->
+        <details class="node" level="1">
+          <summary class="node-card">
+            <span class="caret" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M7 5l6 5-6 5V5z"/></svg></span>
+            2) Digital Curation: Process &amp; Practice
+            <span class="meta">— life cycle management from creation to reuse</span>
+          </summary>
+          <div class="node-card">
+            <p><strong><span class="flag" tabindex="0" data-tip="Use ‘collaborative selection’ or ‘shared appraisal’ to reduce gatekeeping tone.">Appraisal</span> &amp; Selection.</strong> Choose materials representing lived experience and contributions of Scottish <span class="flag" tabindex="0" data-tip="Consider ‘Black and global majority communities in Scotland’.">BME</span> communities—such as oral history interviews, photographic archives, community newsletters/zines, and <span class="flag" tabindex="0" data-tip="Phrase as ‘materials documenting activism (with risk-aware handling and consent)’. ‘Records’ + ‘activism’ can imply surveillance.">records of activism</span>, art and cultural festivals.</p>
+            <p><strong>Community Collaboration.</strong> Co-curate with community members (as co-researchers or co-archivists) to ensure authenticity, relevance and self-representation; participatory approaches mitigate institutional bias.</p>
+
+            <!-- Inline story quote (Pratchett - The Amazing Maurice) -->
+            <div class="quote-card" role="note" aria-label="Quote">
+              “If you don’t turn your life into a story, you just become a part of someone else’s story.”
+              <span class="by">— Terry Pratchett, <em>The Amazing Maurice and His Educated Rodents</em></span>
+            </div>
+
+            <p><strong>Documentation &amp; Description (Metadata).</strong> Create rich, inclusive metadata acknowledging cultural identity/self-description, historical context/community narratives, and sensitivity labels (e.g., sacred or personal). Use standards such as <span class="flag" tabindex="0" data-tip="Use as references where community-fit; adapt with community-defined description, language and sensitivity labels.">Dublin Core, Metadata for Indigenous Collections and UKAD guidelines</span> as adaptable references.</p>
+            <p><strong><span class="flag" tabindex="0" data-tip="Consider ‘community-led digital care’, ‘shared governance of digital collections’, or ‘ethical digital custodianship’. ‘Stewardship’ can imply institutional custody/authority, benevolent control, and permanence that may conflict with community-defined, cyclical care (including time-bound consent, seasonal knowledge, or the right to retract/re-contextualise).">Digital Stewardship</span> &amp; Access Design.</strong>
+              Build <span class="flag" tabindex="0" data-tip="Center community first: ‘Community-managed archives and platforms, in partnership with university or national repositories.’">repositories</span> that prioritise community-managed archives and platforms, in partnership with university or national repositories, with multilingual metadata, strong searchability and WCAG-compliant access; use narrative-driven interfaces that connect “then” and “now”.</p>
+          </div>
+        </details>
+
+        <!-- 3) Selection Criteria (collapsed) -->
+        <details class="node" level="1">
+          <summary class="node-card">
+            <span class="caret" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M7 5l6 5-6 5V5z"/></svg></span>
+            3) Selection Criteria for Preservation
+            <span class="meta">— guide choices in heritage projects</span>
+          </summary>
+          <div class="node-card">
+            <ul>
+              <li><strong><span class="flag" tabindex="0" data-tip="Prefer ‘self-representation’ and ‘community-defined significance’; avoid collecting ‘about’ rather than ‘with’.">Representation</span>:</strong> Include <span class="flag" tabindex="0" data-tip="Say ‘histories and voices that have been systemically excluded or overlooked’ to emphasise structures rather than absence.">under-represented</span> <span class="flag" tabindex="0" data-tip="Consider ‘Black and global majority communities in Scotland’.">BME</span> voices in Scottish history.</li>
+              <li><strong>Uniqueness:</strong> Prioritise materials likely to be lost or <span class="flag" tabindex="0" data-tip="Prefer ‘previously under-described, dispersed or excluded’ to avoid passive ‘overlooked’.">overlooked</span>.</li>
+              <li><strong><span class="flag" tabindex="0" data-tip="Use ‘community-defined relevance/significance’ to avoid external/extractive framing.">Relevance</span>:</strong> Capture change and continuity in <span class="flag" tabindex="0" data-tip="Consider community-preferred phrasing.">BME</span> experiences.</li>
+              <li><strong><span class="flag" tabindex="0" data-tip="Prefer ‘completeness and context’; if any quality assessments are used, disclose criteria transparently.">Quality</span> &amp; Context:</strong> Ensure sufficient metadata, <span class="flag" tabindex="0" data-tip="Consider ‘community context/origin information’.">provenance</span> and narrative framing to preserve meaning.</li>
+            </ul>
+
+            <!-- Inline story quote (Maya Angelou) -->
+            <div class="quote-card" role="note" aria-label="Quote">
+              “There is no greater agony than bearing an untold story inside you.”
+              <span class="by">— Maya Angelou, <em>I Know Why the Caged Bird Sings</em></span>
+            </div>
+          </div>
+        </details>
+
+        <!-- 4) Ethical & Decolonial (collapsed) -->
+        <details class="node" level="1">
+          <summary class="node-card">
+            <span class="caret" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M7 5l6 5-6 5V5z"/></svg></span>
+            4) Ethical &amp; Decolonial Dimensions
+            <span class="meta">— governance, consent and context</span>
+          </summary>
+          <div class="node-card">
+            <ul>
+              <li><strong>Community <span class="flag" tabindex="0" data-tip="Prefer ‘governance, control & consent’ over property language like ‘ownership’.">Ownership</span>, Governance, Control &amp; Consent:</strong> Contributors retain agency over their stories and data.</li>
+              <li><strong>Contextualisation:</strong> Avoid tokenism by situating materials within migration, racism, resilience and creativity narratives.</li>
+              <li><strong>Reflexivity:</strong> Institutions practice critical self-awareness and acknowledge positionality when preserving and interpreting histories that have been systemically excluded.</li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- 5) Then & Now (collapsed) -->
+        <details class="node" level="1">
+          <summary class="node-card">
+            <span class="caret" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M7 5l6 5-6 5V5z"/></svg></span>
+            5) <span class="flag" tabindex="0" data-tip="Use as a narrative device; avoid implying linear progress — recognise continuities, returns and cyclical time.">Then &amp; Now</span> Approach
+            <span class="meta">— temporal &amp; narrative curation strategy</span>
+          </summary>
+          <div class="node-card">
+            <ul>
+              <li><strong>Then — Archival Recovery:</strong> Rediscover <span class="flag" tabindex="0" data-tip="Prefer ‘previously under-described, dispersed or excluded’ to avoid passive ‘overlooked’.">overlooked</span> historical materials from communities in Scotland.</li>
+              <li><strong>Now — Digital Storytelling:</strong> Preserve ongoing community work, artistic production and oral traditions in contemporary digital formats.</li>
+              <li><strong>Connection:</strong> Build interpretive frameworks tracing continuity and transformation across time.</li>
+            </ul>
+
+            <!-- Inline story quote (Pratchett - Witches Abroad) -->
+            <div class="quote-card" role="note" aria-label="Quote">
+              “People think that stories are shaped by people. In fact, it’s the other way around.”
+              <span class="by">— Terry Pratchett, <em>Witches Abroad</em></span>
+            </div>
+          </div>
+        </details>
+
+        <!-- 6) References (collapsed) -->
+        <details class="node" level="1">
+          <summary class="node-card">
+            <span class="caret" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M7 5l6 5-6 5V5z"/></svg></span>
+            6) References
+            <span class="meta">— Terminology and citation tables</span>
+          </summary>
+          <div class="node-card refs">
+            <p class="hint">The tables below summarise contentious terms, reasons, alternatives, and key references. Each reference is linked and has a tooltip explaining why it’s cited here.</p>
+
+            <h2>Structural and framing language</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Term</th><th>Why problematic</th><th>Alternative</th><th>References</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>BME</td>
+                    <td>Homogenises identities; frames as minorities.</td>
+                    <td>“Black and global majority communities”</td>
+                    <td>
+                      <a class="ref-link" href="https://www.museumsassociation.org/app/uploads/2021/11/Supporting-decolonisation-in-museums-final-version.pdf" target="_blank" rel="noopener" data-tip="UK sector guidance encouraging decolonising practice and community authority; supports moving beyond homogenising labels.">Museums Association (2021)</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Heritage</td>
+                    <td>Can imply institutional custody rather than community custodianship.</td>
+                    <td>“Community materials”</td>
+                    <td>
+                      <a class="ref-link" href="https://www.getty.edu/publications/heritagemanagement/part-two/3/" target="_blank" rel="noopener" data-tip="Synthesises scholarship (incl. Brown & Nicholas) on how heritage framings can marginalise community authority.">Avrami (2019) citing Brown & Nicholas</a>
+                      ;
+                      <a class="ref-link" href="https://localcontexts.org/labels/traditional-knowledge-labels/" target="_blank" rel="noopener" data-tip="TK Labels operationalise community governance and contextual metadata beyond institutional ‘heritage’ framings.">Local Contexts TK Labels</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Ownership</td>
+                    <td>Property framing; conflicts with sovereignty/custodianship.</td>
+                    <td>“Governance, control & consent”</td>
+                    <td>
+                      <a class="ref-link" href="https://link.springer.com/article/10.1007/s10502-019-09307-x" target="_blank" rel="noopener" data-tip="Proposes ‘slow archives’ centring community relationships, consent and sovereignty over extractive ownership logics.">Christen & Anderson (2019)</a>
+                      ;
+                      <a class="ref-link" href="https://www.gida-global.org/care" target="_blank" rel="noopener" data-tip="CARE principles emphasise collective benefit, authority to control, responsibility and ethics—preferred over ownership language.">CARE Principles (2019)</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Authenticity</td>
+                    <td>Implies a single ‘true’ account of identity/history.</td>
+                    <td>“Community-defined authenticity”; “integrity”.</td>
+                    <td>
+                      <a class="ref-link" href="https://www.ica.org/ica-network/expert-groups/egim/ica-naa-indigenous-matters-summit/" target="_blank" rel="noopener" data-tip="ICA resources advocate community authority and context in description and stewardship.">ICA/NAA Indigenous Matters Summit</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Provenance</td>
+                    <td>Property/colonial associations in some contexts.</td>
+                    <td>“Community context / origin information”.</td>
+                    <td>
+                      <a class="ref-link" href="https://localcontexts.org/labels/traditional-knowledge-labels/" target="_blank" rel="noopener" data-tip="Labels embed origin/community context in metadata; practical alternative to ownership-centric provenance.">Local Contexts TK Labels</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h2>Process and practice terminology</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Term</th><th>Why problematic</th><th>Alternative</th><th>References</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>Appraisal</td>
+                    <td>Signals top-down expert gatekeeping.</td>
+                    <td>“Collaborative selection”</td>
+                    <td>
+                      <a class="ref-link" href="https://archivaria.ca/index.php/archivaria/article/view/13557" target="_blank" rel="noopener" data-tip="Introduces ‘radical empathy’ and care ethics—supports participatory, community-centred decision-making beyond traditional appraisal.">Caswell & Cifor (2016)</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Records of activism</td>
+                    <td>May imply surveillance without consent context.</td>
+                    <td>“Materials documenting activism (risk-aware, consent)”</td>
+                    <td>
+                      <a class="ref-link" href="https://journals.litwinbooks.com/index.php/jclis/issue/view/10" target="_blank" rel="noopener" data-tip="Special issue on radical empathy and ethics; offers risk-aware approaches to documenting activism and harm reduction.">JCLIS Radical Empathy issue (2021)</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Long-term access</td>
+                    <td>Can imply institutional control/universal openness.</td>
+                    <td>“Community-approved / co-defined access conditions”</td>
+                    <td>
+                      <a class="ref-link" href="https://www2.nau.edu/libnap-p/PrintProtocols.pdf" target="_blank" rel="noopener" data-tip="Protocols recommend culturally responsive access conditions and community authority in archival practice.">First Archivists Circle (2007)</a>
+                      ;
+                      <a class="ref-link" href="https://www.dpconline.org/handbook" target="_blank" rel="noopener" data-tip="DPC Handbook & ethics notes support balancing preservation with ethical, culturally appropriate access.">DPC Handbook</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h2>Conceptual or theoretical framing</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Term</th><th>Why problematic</th><th>Alternative</th><th>References</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>Representation</td>
+                    <td>Risks speaking for rather than with.</td>
+                    <td>“Self-representation; community-defined significance”</td>
+                    <td>
+                      <a class="ref-link" href="https://www.bloomsbury.com/us/decolonizing-methodologies-9781786998125/" target="_blank" rel="noopener" data-tip="Foundational text on community-led research and self-determination; underpins self-representation framing.">Smith (2006/2012)</a>
+                      ;
+                      <a class="ref-link" href="https://www.dukeupress.edu/on-being-included" target="_blank" rel="noopener" data-tip="Critiques institutional ‘diversity’ language and representation politics; supports moving to self-representation.">Ahmed (2012)</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Then &amp; Now</td>
+                    <td>Can imply linear progress/modernisation.</td>
+                    <td>“Temporal connections; continuities and returns”</td>
+                    <td>
+                      <a class="ref-link" href="https://uncpress.org/9780807837153/decolonizing-museums/" target="_blank" rel="noopener" data-tip="Shows how decolonising museum practice foregrounds trauma, continuity, and truth-telling over linear progress narratives.">Lonetree (2012)</a>
+                      ;
+                      <a class="ref-link" href="https://link.springer.com/chapter/10.1007/978-94-010-0570-8_2" target="_blank" rel="noopener" data-tip="Mbembe’s essay interrogates archival power/temporality; useful for problematising linear ‘then/now’ frames.">Mbembe (2002)</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Repository hierarchy</td>
+                    <td>Ordering privileges institutions over communities.</td>
+                    <td>Lead with community-managed archives.</td>
+                    <td>
+                      <a class="ref-link" href="https://www.semanticscholar.org/paper/Neutrality%2C-social-justice-and-the-obligations-of-Gilliland/245b17373ad6241b330ca99873feb583a7ba072e" target="_blank" rel="noopener" data-tip="Argues against false neutrality and for social justice obligations—supporting community-first ordering.">Gilliland (2011/2015)</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h2>Broader ethical framing</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Term</th><th>Why problematic</th><th>Alternative</th><th>References</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>Marginalised histories</td>
+                    <td>Defines by exclusion rather than agency.</td>
+                    <td>“Histories that have been systemically excluded”</td>
+                    <td>
+                      <a class="ref-link" href="https://www.dukeupress.edu/on-being-included" target="_blank" rel="noopener" data-tip="Analyzes how institutional language can mask exclusion; supports reframing away from deficit labels.">Ahmed (2012)</a>
+                      ;
+                      <a class="ref-link" href="https://www.dpconline.org/handbook" target="_blank" rel="noopener" data-tip="Handbook’s community archives and ethics guidance support reframing through participatory practice.">DPC Handbook</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Standards as fixed</td>
+                    <td>Risk of imposing external vocabularies.</td>
+                    <td>Adapt standards with community input</td>
+                    <td>
+                      <a class="ref-link" href="https://localcontexts.org/labels/about-the-labels/" target="_blank" rel="noopener" data-tip="Demonstrates adapting descriptive practice via community-authored TK/BC Labels.">Local Contexts (overview)</a>
+                      ;
+                      <a class="ref-link" href="https://www.gida-global.org/care" target="_blank" rel="noopener" data-tip="CARE complements FAIR by centring community authority and ethics in data/metadata standards.">CARE Principles</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Use Europeana DE-BIAS</td>
+                    <td>Operational tool for flagging/updating biased terms in multilingual CH metadata.</td>
+                    <td>Consult vocabulary and guidelines</td>
+                    <td>
+                      <a class="ref-link" href="https://pro.europeana.eu/page/the-de-bias-vocabulary" target="_blank" rel="noopener" data-tip="Vocabulary of ~700 flagged terms with issues/alternatives across 5 languages.">DE-BIAS Vocabulary (2024)</a>
+                      ;
+                      <a class="ref-link" href="https://pro.europeana.eu/files/Europeana_Professional/Projects/debias/DE-BIAS_Representing_diversity_in_metadata_guidelines.pdf" target="_blank" rel="noopener" data-tip="Guidelines on representing diversity in metadata; aligns with your tooltip approach.">DE-BIAS Guidelines</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+      </details>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      const all = Array.from(document.querySelectorAll('details'));
+      const topSections = document.querySelectorAll('.root-intro > details.node[level="1"]');
+      document.getElementById('expand').addEventListener('click',()=> all.forEach(d=> d.open=true));
+      document.getElementById('collapse').addEventListener('click',()=> all.forEach(d=> d.open=false));
+      // Default: only section 1 open
+      topSections.forEach((d,i)=>{ d.open = (i === 0); });
+    })();
+  </script>
+</body>
+</html>
